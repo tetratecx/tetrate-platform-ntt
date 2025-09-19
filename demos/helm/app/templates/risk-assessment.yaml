@@ -1,0 +1,55 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: risk-assessment
+  labels:
+    app: risk-assessment
+spec:
+  ports:
+    - port: 9080
+      name: http
+  selector:
+    app: risk-assessment
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: transaction-risk-assessment
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: risk-assessment-v1
+  labels:
+    app: risk-assessment
+    version: v1
+spec:
+  replicas: {{ .Values.riskAssessment.replicas.v1 }}
+  selector:
+    matchLabels:
+      app: risk-assessment
+      version: v1
+  template:
+    metadata:
+      labels:
+        app: risk-assessment
+        version: v1
+    spec:
+      serviceAccountName: transaction-risk-assessment
+      containers:
+        - name: risk-assessment
+          image: "{{ .Values.global.image.repository }}:{{ .Values.global.image.tag }}"
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 9080
+          env:
+            - name: SERVICE_NAME
+              value: "risk-assessment"
+            - name: SERVICE_VERSION
+              value: "v1"
+            - name: SERVICE_PORT
+              value: "9080"
+            - name: OTEL_EXPORTER_OTLP_ENDPOINT
+              value: "{{ .Values.global.otelCollectorEndpoint }}"
+            - name: CALL_UPSTREAMS
+              value: "false"

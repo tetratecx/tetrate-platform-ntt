@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: transaction-traffic-generator
+  labels:
+    app: transaction-traffic-generator
+    version: v1
+spec:
+  replicas: {{ .Values.transactionTrafficGenerator.replicas }}
+  selector:
+    matchLabels:
+      app: transaction-traffic-generator
+      version: v1
+  template:
+    metadata:
+      labels:
+        app: transaction-traffic-generator
+        version: v1
+    spec:
+      containers:
+        - name: traffic-generator
+          image: "{{ .Values.global.image.repository }}:{{ .Values.global.image.tag }}"
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 9080
+          env:
+            - name: SERVICE_NAME
+              value: "transaction-traffic-generator"
+            - name: SERVICE_VERSION
+              value: "v1"
+            - name: SERVICE_PORT
+              value: "9080"
+            - name: UPSTREAM_URLS
+              value: "http://transaction-portal:9080"
+            - name: OTEL_EXPORTER_OTLP_ENDPOINT
+              value: "{{ .Values.global.otelCollectorEndpoint }}"
+            - name: INCLUDE_HEADERS
+              value: "true"
+            - name: RESPONSE_FIELD_GENERATOR_TYPE
+              value: "transaction_load_tester"
+            - name: RESPONSE_FIELD_TARGET_SERVICE
+              value: "transaction-portal"
+            - name: NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
