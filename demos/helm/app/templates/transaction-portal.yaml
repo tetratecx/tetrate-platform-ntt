@@ -1,0 +1,59 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: transaction-portal
+  labels:
+    app: transaction-portal
+spec:
+  ports:
+    - port: 9080
+      name: http
+  selector:
+    app: transaction-portal
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: transaction-portal
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: transaction-portal-v2
+  labels:
+    app: transaction-portal
+    version: v2
+spec:
+  replicas: {{ .Values.transactionPortal.replicas.v2 }}
+  selector:
+    matchLabels:
+      app: transaction-portal
+      version: v2
+  template:
+    metadata:
+      labels:
+        app: transaction-portal
+        version: v2
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9080"
+        prometheus.io/path: "/metrics"
+    spec:
+      serviceAccountName: transaction-portal
+      containers:
+        - name: transaction-portal
+          image: "{{ .Values.global.image.repository }}:{{ .Values.global.image.tag }}"
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 9080
+          env:
+            - name: SERVICE_NAME
+              value: "transaction-portal"
+            - name: SERVICE_VERSION
+              value: "v2"
+            - name: SERVICE_PORT
+              value: "9080"
+            - name: UPSTREAM_URLS
+              value: "http://account-service:9080,http://fraud-detection:9080,http://risk-assessment:9080"
+            - name: OTEL_EXPORTER_OTLP_ENDPOINT
+              value: "{{ .Values.global.otelCollectorEndpoint }}"
