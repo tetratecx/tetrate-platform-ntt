@@ -76,6 +76,17 @@ transaction-portal-v2-679fcc5d5b-rng9s          2/2     Running   0          20s
 transaction-traffic-generator-56ddfb497-mj7dw   2/2     Running   0          20s
 ```
 
+### To upgrade
 
+```sh
+helm upgrade --install transaction-portal ./app \
+  --namespace transaction-oversight
+```
+
+### To uninstall
+
+```sh
+helm uninstall transaction-portal --namespace transaction-oversight
+```
 
 

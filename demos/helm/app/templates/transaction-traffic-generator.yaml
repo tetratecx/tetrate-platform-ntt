@@ -44,3 +44,11 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.namespace
+          command: ["/bin/sh"]
+          args:
+            - "-c"
+            - |
+              while true; do
+                curl -s http://transaction-portal:9080 > /dev/null
+                sleep 1
+              done
