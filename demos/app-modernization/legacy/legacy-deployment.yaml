@@ -1,0 +1,93 @@
+# Legacy Monolithic Transaction Portal
+# NOTE: This is just for demonstration of complexity/anti-patterns.
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: legacy-transaction-portal
+  labels:
+    app: legacy-transaction-portal
+spec:
+  ports:
+  - port: 8080
+    name: http
+  selector:
+    app: legacy-transaction-portal
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: legacy-transaction-portal
+  labels:
+    app: legacy-transaction-portal
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: legacy-transaction-portal
+  template:
+    metadata:
+      labels:
+        app: legacy-transaction-portal
+    spec:
+      containers:
+      - name: legacy-transaction-portal
+        image: legacy/transaction-portal:1.0
+        ports:
+        - containerPort: 8080
+        env:
+        # Everything stuffed into one app...
+        - name: ENABLE_ACCOUNTS
+          value: "true"
+        - name: ENABLE_FRAUD
+          value: "true"
+        - name: ENABLE_RISK
+          value: "true"
+        - name: ENABLE_REPORTING
+          value: "true"
+        - name: DB_HOST
+          value: "legacy-db:5432"
+        - name: DB_USER
+          value: "root"
+        - name: DB_PASSWORD
+          value: "hardcoded_password"   # 🔴 BAD PRACTICE
+        - name: LOG_LEVEL
+          value: "DEBUG"
+        - name: FEATURE_FLAGS
+          value: "fraud_v1,risk_model_v1,account_balance_check"
+
+        # Fake env vars showing how bloated it got
+        - name: ACCOUNT_TIMEOUT
+          value: "5000"
+        - name: FRAUD_MODEL_PATH
+          value: "/opt/models/fraud_v1.bin"
+        - name: RISK_ENGINE_MODE
+          value: "blocking"
+        - name: PORTAL_THEME
+          value: "legacy-enterprise-edition"
+        - name: MONOLITH_MODE
+          value: "true"
+
+        volumeMounts:
+        - name: legacy-config
+          mountPath: /etc/legacy-config
+      volumes:
+      - name: legacy-config
+        configMap:
+          name: legacy-transaction-config
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: legacy-transaction-config
+data:
+  application.properties: |
+    # Giant config file mixing all domains
+    db.url=jdbc:postgresql://legacy-db:5432/transactions
+    db.user=root
+    db.password=hardcoded_password
+    account.max.balance.checks=500
+    fraud.model.threshold=0.75
+    risk.assessment.delay.ms=2500
+    portal.ui.theme=legacy
+    feature.flags=fraud_v1,risk_model_v1,account_balance_check,reporting
