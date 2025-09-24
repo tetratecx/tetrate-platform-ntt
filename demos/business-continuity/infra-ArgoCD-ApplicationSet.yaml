@@ -20,7 +20,7 @@ spec:
       project: default
       source:
         repoURL: https://github.com/tetratecx/tetrate-platform-ntt.git
-        targetRevision: artem-demos
+        targetRevision: HEAD
         path: 'demos/{{demo}}/gitops'
       destination:
         name: '{{name}}'

@@ -23,13 +23,13 @@ spec:
       sources:
       - repoURL: https://github.com/tetratecx/tetrate-platform-ntt.git
         path: demos/helm/app
-        targetRevision: artem-demos
+        targetRevision: HEAD
         helm:
           valueFiles:
             - '$values/demos/{{demo}}/app/values.yaml'
       - repoURL: https://github.com/tetratecx/tetrate-platform-ntt.git
         path: .
-        targetRevision: artem-demos
+        targetRevision: HEAD
         ref: values         
       destination:
         name: '{{name}}'
