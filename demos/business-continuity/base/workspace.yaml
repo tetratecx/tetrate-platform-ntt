@@ -1,0 +1,11 @@
+apiVersion: tsb.tetrate.io/v2
+kind: Workspace
+metadata:
+  name: continuity-portal
+  annotations:
+    tsb.tetrate.io/organization: dynabank
+    tsb.tetrate.io/tenant: business-continuity
+spec:
+  namespaceSelector:
+    names:
+    - "*/continuity-portal"
