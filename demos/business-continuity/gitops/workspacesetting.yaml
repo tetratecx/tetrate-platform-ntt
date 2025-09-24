@@ -1,0 +1,14 @@
+apiVersion: tsb.tetrate.io/v2
+kind: WorkspaceSetting
+metadata:
+  name: default-setting
+  annotations:
+    tsb.tetrate.io/organization: dynabank
+    tsb.tetrate.io/tenant: business-continuity  
+    tsb.tetrate.io/workspace: transaction-portal
+spec:
+  defaultEastWestGatewaySettings:
+    - workloadSelector:
+        namespace: business-continuity
+        labels:
+          istio: ingressgateway

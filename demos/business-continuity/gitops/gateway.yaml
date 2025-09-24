@@ -1,0 +1,24 @@
+apiVersion: gateway.tsb.tetrate.io/v2
+kind: Gateway
+metadata:
+ name: transaction-portal
+ annotations:
+  tsb.tetrate.io/organization: dynabank
+  tsb.tetrate.io/tenant: business-continuity  
+  tsb.tetrate.io/workspace: transaction-portal
+  tsb.tetrate.io/gatewayGroup: transaction-portal-gg
+spec:
+  workloadSelector:
+    namespace: business-continuity
+    labels:
+      istio: ingressgateway
+  http:
+  - hostname: transaction-portal.tetrate.io
+    name: transaction-portal
+    port: 80
+    routing:
+      rules:
+        - route:
+            serviceDestination:
+              host: business-continuity/transaction-portal.business-continuity.svc.cluster.local
+              port: 9080
