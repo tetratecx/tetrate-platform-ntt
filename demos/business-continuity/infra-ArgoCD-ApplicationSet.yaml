@@ -3,13 +3,14 @@ kind: ApplicationSet
 metadata:
   name: business-continuity-infra
 spec:
-  # goTemplate: true
-  # goTemplateOptions: ["missingkey=error"]
   generators:
-  - clusters: {}
+  - clusters:
+      selector:
+        matchLabels:
+          gitops: argocd
   template:
     metadata:
-      name: '{{name}}'
+      name: '{{name}}-argocd-gitops'
     spec:
       project: default
       source:
@@ -17,7 +18,7 @@ spec:
         targetRevision: artem-demos
         path: demos/business-continuity/gitops
       destination:
-        name: t2cp1-dynabank
+        name: '{{name}}'
         namespace: argo-gitops
       syncPolicy:
         automated:

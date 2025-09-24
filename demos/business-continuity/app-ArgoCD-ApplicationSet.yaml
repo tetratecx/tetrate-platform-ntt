@@ -1,32 +1,33 @@
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
-  name: business-continuity-base
+  name: business-continuity-app
 spec:
-  # goTemplate: true
-  # goTemplateOptions: ["missingkey=error"]
   generators:
-  - matrix:    
-      generators:
-      - list:
-          elements:
-          - cluster: t2cp1-dynabank
-            url: https://dynabank-t2cp1.aws.scratch.caas.tetrate.com:443
-            namespace: argo-gitops
-            description: tsb-config
-            path: demos/business-continuity/gitops
+    - matrix:
+        generators:
+        - clusters:
+            selector:
+              matchLabels:
+                tsb: t2
+        - list:
+            elements:
+              - appName: transaction-portal
+                demo: business-continuity
   template:
     metadata:
-      name: '{{cluster}}-{{description}}'
+      name: '{{name}}-{{appName}}'
     spec:
       project: default
-      source:
-        repoURL: https://github.com/tetratecx/tetrate-platform-ntt.git
-        targetRevision: artem-demos
-        path: '{{path}}'
+      sources:
+      - repoURL: https://github.com/tetratecx/tetrate-platform-ntt.git
+        path: demos/helm/app
+        helm:
+          valueFiles:
+            - '{{demo}}/app/values.yaml'
       destination:
-        server: '{{url}}'
-        namespace: '{{namespace}}'
+        name: '{{name}}'
+        namespace: '{{demo}}'
       syncPolicy:
         automated:
           prune: true
