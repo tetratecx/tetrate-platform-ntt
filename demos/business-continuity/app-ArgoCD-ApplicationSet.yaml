@@ -34,8 +34,11 @@ spec:
         name: '{{name}}'
         namespace: '{{demo}}'
       syncPolicy:
+        managedNamespaceMetadata:
+          labels: 
+            istio.io/rev: default
         automated:
           prune: true
           selfHeal: true
         syncOptions:
-        - CreateNamespace=true        
+        - CreateNamespace=true
