@@ -1,13 +1,16 @@
-apiVersion: api.tsb.tetrate.io/v2
+apiVersion: tsb.tetrate.io/v2
 kind: WorkspaceSetting
 metadata:
-  organization: tetrate
-  tenant: tetrate
-  workspace: bookinfo-ws
-  name: bookinfo-ws-setting
+  name: default-setting
+  namespace: argo-gitops
+  annotations:
+    tsb.tetrate.io/organization: dynabank
+    tsb.tetrate.io/tenant: business-continuity  
+    tsb.tetrate.io/workspace: continuity-portal
 spec:
   defaultEastWestGatewaySettings:
     - workloadSelector:
         namespace: eastwest
         labels:
-          app: eastwest-gateway
+          istio: ingressgateway
+
