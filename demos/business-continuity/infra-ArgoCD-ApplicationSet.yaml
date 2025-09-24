@@ -4,19 +4,24 @@ metadata:
   name: business-continuity-infra
 spec:
   generators:
-  - clusters:
-      selector:
-        matchLabels:
-          gitops: argocd
+    - matrix:
+        generators:
+        - clusters:
+            selector:
+              matchLabels:
+                gitops: argocd
+        - list:
+            elements:
+              - demo: business-continuity
   template:
     metadata:
-      name: '{{name}}-argocd-gitops'
+      name: '{{name}}-{{demo}}-argocd-gitops'
     spec:
       project: default
       source:
         repoURL: https://github.com/tetratecx/tetrate-platform-ntt.git
         targetRevision: artem-demos
-        path: demos/business-continuity/gitops
+        path: 'demos/{{demo}}/gitops'
       destination:
         name: '{{name}}'
         namespace: argo-gitops

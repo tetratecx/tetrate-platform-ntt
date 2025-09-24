@@ -1,0 +1,13 @@
+apiVersion: gateway.tsb.tetrate.io/v2
+kind: Group
+metadata:  
+  name: transaction-portal-gg
+  annotations:
+    tsb.tetrate.io/organization: dynabank
+    tsb.tetrate.io/tenant: business-continuity  
+    tsb.tetrate.io/workspace: transaction-portal
+spec:
+  namespaceSelector:
+    names:
+    - "*/business-continuity"
+  configMode: BRIDGED
