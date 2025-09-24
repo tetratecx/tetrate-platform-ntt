@@ -8,11 +8,11 @@ metadata:
   tsb.tetrate.io/workspace: transaction-portal
   tsb.tetrate.io/gatewayGroup: transaction-portal-gg
 spec:
- workloadSelector:
-   namespace: business-continuity
-   labels:
-     istio: ingressgateway
-http:
+  workloadSelector:
+    namespace: business-continuity
+    labels:
+    istio: ingressgateway
+  http:
   - hostname: transaction-portal.tetrate.io
     name: transaction-portal
     port: 80
