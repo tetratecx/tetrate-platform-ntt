@@ -1,0 +1,27 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: business-continuity-infra
+spec:
+  # goTemplate: true
+  # goTemplateOptions: ["missingkey=error"]
+  generators:
+  - clusters: {}
+  template:
+    metadata:
+      name: '{{name}}'
+    spec:
+      project: default
+      source:
+        repoURL: https://github.com/tetratecx/tetrate-platform-ntt.git
+        targetRevision: artem-demos
+        path: demos/business-continuity/gitops
+      destination:
+        name: t2cp1-dynabank
+        namespace: argo-gitops
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+        - CreateNamespace=true        

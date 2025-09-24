@@ -1,0 +1,7 @@
+apiVersion: tsb.tetrate.io/v2
+kind: Tenant
+metadata:
+  name: business-continuity  
+  namespace: argo-gitops
+  annotations:
+    tsb.tetrate.io/organization: dynabank

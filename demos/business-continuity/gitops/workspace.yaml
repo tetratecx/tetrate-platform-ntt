@@ -2,6 +2,7 @@ apiVersion: tsb.tetrate.io/v2
 kind: Workspace
 metadata:
   name: continuity-portal
+  namespace: argo-gitops
   annotations:
     tsb.tetrate.io/organization: dynabank
     tsb.tetrate.io/tenant: business-continuity
