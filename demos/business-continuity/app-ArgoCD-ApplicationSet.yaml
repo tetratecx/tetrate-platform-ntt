@@ -17,7 +17,7 @@ spec:
                 demo: business-continuity
   template:
     metadata:
-      name: '{{name}}-{{appName}}'
+      name: '{{name}}-{{demo}}-{{appName}}'
     spec:
       project: default
       sources:
