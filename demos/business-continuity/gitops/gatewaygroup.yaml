@@ -10,5 +10,5 @@ spec:
   namespaceSelector:
     names:
     - "dynabank-2/business-continuity"
-    - "dynabank-2/business-continuity"
+    - "dynabank-3/business-continuity"
   configMode: BRIDGED
