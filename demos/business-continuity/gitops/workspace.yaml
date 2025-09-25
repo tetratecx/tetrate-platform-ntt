@@ -8,5 +8,5 @@ metadata:
 spec:
   namespaceSelector:
     names:
-    - "t2cp1-twotier/business-continuity"
-    - "t2cp2-twotier/business-continuity"
+    - "dynabank-2/business-continuity"
+    - "dynabank-2/business-continuity"
