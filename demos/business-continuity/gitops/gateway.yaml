@@ -11,7 +11,7 @@ spec:
   workloadSelector:
     namespace: business-continuity
     labels:
-      istio: ingressgateway
+      app: transaction-gw
   http:
   - hostname: transaction-portal.tetrate.io
     name: transaction-portal
