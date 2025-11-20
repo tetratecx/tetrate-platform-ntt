@@ -1,0 +1,24 @@
+apiVersion: gateway.tsb.tetrate.io/v2
+kind: Gateway
+metadata:
+  name: transaction-igw
+  annotations:
+    tsb.tetrate.io/organization: dynabank
+    tsb.tetrate.io/tenant: capital-market-transactions
+    tsb.tetrate.io/workspace: capital-market-transactions-ws
+    tsb.tetrate.io/gatewayGroup: transactions-igw-gg
+spec:
+  workloadSelector:
+    namespace: transaction-oversight
+    labels:
+      app: transaction-gw
+  http:
+    - name: online-banking
+      hostname: online.banking.dynabank.com
+      port: 80
+      routing:
+        rules:
+        - route:
+            serviceDestination:
+              host: transaction-oversight/transaction-portal.transaction-oversight.svc.cluster.local
+              port: 9080

@@ -19,6 +19,52 @@ metadata:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  name: fraud-detection-v1
+  labels:
+    app: fraud-detection
+    version: v1
+spec:
+  replicas: {{ .Values.fraudDetection.replicas.v1 }}
+  selector:
+    matchLabels:
+      app: fraud-detection
+      version: v1
+  template:
+    metadata:
+      labels:
+        app: fraud-detection
+        version: v1
+    spec:
+      serviceAccountName: transaction-fraud-detection
+      containers:
+        - name: fraud-detection
+          image: "{{ .Values.global.image.repository }}:{{ .Values.global.image.tag }}"
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 9080
+          env:
+            - name: SERVICE_NAME
+              value: "fraud-detection"
+            - name: SERVICE_VERSION
+              value: "v2"
+            - name: SERVICE_PORT
+              value: "9080"
+            - name: UPSTREAM_URLS
+              value: "http://risk-assessment:9080"
+            - name: OTEL_EXPORTER_OTLP_ENDPOINT
+              value: "{{ .Values.global.otelCollectorEndpoint }}"
+            - name: RESPONSE_FIELD_FRAUD_MODEL
+              value: "ml_v2"
+            - name: RESPONSE_FIELD_ENHANCED_ANALYSIS
+              value: "true"
+            - name: NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
   name: fraud-detection-v2
   labels:
     app: fraud-detection
