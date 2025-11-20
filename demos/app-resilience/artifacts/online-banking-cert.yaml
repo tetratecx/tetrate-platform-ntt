@@ -1,0 +1,15 @@
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: online-banking-certs
+  namespace: tetrate-system
+spec:
+  secretName: online-banking-certs
+  duration: 21600h # 900d
+  issuerRef:
+    name: selfsigned-ca
+    kind: ClusterIssuer
+    group: cert-manager.io
+  dnsNames:
+    - "online-banking.dynabank.com"
