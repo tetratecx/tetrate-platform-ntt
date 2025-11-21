@@ -1,70 +1,108 @@
-## What is this
+# Tetrate Platform Multi-Cluster Resiliency Demo
 
-### Prereq
+## Overview
 
-- have access to all clusters
-- have kubectl/kubectx installed
-- have task installed
+This demo showcases how Tetrate Platform delivers intelligent failover across infrastructure, clusters, workloads, and gateways—eliminating downtime caused by failures that traditional load balancers can't detect.
 
-### To load demo config follow the steps
+### The Problem
 
-1. Switch context to `east-cluster` and deploy your app
+Modern distributed systems face failures at every level:
+- Infrastructure outages
+- Cluster upgrades and failures
+- Workload crashes
+- Gateway issues
 
+Traditional gateways and load balancers can't detect these failures in real-time, leading to:
+- Service downtime
+- Failed transactions
+- Poor user experience
+- Hours of firefighting for operations teams
+- Missed SLAs
+
+**Critical question:** What happens if one of your clusters goes down right now?
+
+### The Solution
+
+Tetrate Platform provides intelligent, automated failover at every layer of your infrastructure.
+
+## Prerequisites
+
+Ensure you have the following installed and configured:
+- Access to all required Kubernetes clusters
+- `kubectl` and `kubectx`
+- [`task`](https://taskfile.dev) (task runner)
+
+## Setup Instructions
+
+### 1. Deploy Application to East Cluster
 ```sh
 kubectx east-cluster
 kubectl apply -f app.yaml
 ```
 
-2. Switch context to `west-cluster` and deploy your app
-
+### 2. Deploy Application to West Cluster
 ```sh
 kubectx west-cluster
 kubectl apply -f app.yaml
 ```
 
-3. Switch context to `corp-edge` cluster to create certificate and secret
+### 3. Configure Edge Gateway
 
+Switch to the `corp-edge` cluster and apply resilience configurations:
 ```sh
 kubectx corp-edge
-kubectl apply -f online-banking-cert.yaml
+kubectl apply -f online-banking-secret.yaml
+kubectl apply -f http-profile.yaml
+kubectl apply -f tenant-settings.yaml
 ```
 
-### To run demo follow the steps
+## Running the Demo
 
-1. Generate traffic to your app
+### Generate Traffic
 
+Start continuous traffic generation to your application:
 ```sh
 task generate-traffic
 ```
 
-2. Run this command to see available scenarios and execute them
+### Execute Demo Scenarios
 
+View and run available demonstration scenarios:
 ```sh
 task
 ```
 
-### Acive/Active, Active/Standby setup examples
+## Load Balancing Configuration
 
-You can explicitly setup your A/A or A/S load balancing from Edge Gateway by following:
+### Active/Active Setup (Round-Robin)
 
-1. Run this commands for active/active:
-
+Distribute traffic evenly across both clusters:
 ```sh
 kubectx east-cluster
-kubectl patch service web-portal -n transaction-service -p ‘{“metadata”:{“annotations”:{“gateway.tetrate.io/edge-clusters”:“corp-edge:100"}}}’
+kubectl patch service web-portal -n transaction-service -p '{"metadata":{"annotations":{"gateway.tetrate.io/edge-clusters":"corp-edge:100"}}}'
+
 kubectx west-cluster
-kubectl patch service web-portal -n transaction-service -p ‘{“metadata”:{“annotations”:{“gateway.tetrate.io/edge-clusters”:“corp-edge:100"}}}’
+kubectl patch service web-portal -n transaction-service -p '{"metadata":{"annotations":{"gateway.tetrate.io/edge-clusters":"corp-edge:100"}}}'
 ```
 
-2. Run this commands to make west-cluster as Active cluster expicitly
+### Active/Standby Setup
 
-The Tetrate Platform automatically discovers all services and their geographic locations. By default, traffic is routed to the nearest local services. Clusters within the same region are prioritized first, and if they become unhealthy or unavailable, traffic will automatically fail over to the next available region.
-
+Configure west-cluster as the active cluster with east-cluster as standby:
 ```sh
 kubectx east-cluster
-kubectl patch service web-portal -n transaction-service -p ‘{“metadata”:{“annotations”:{“gateway.tetrate.io/edge-clusters”:“corp-edge:0"}}}’
+kubectl patch service web-portal -n transaction-service -p '{"metadata":{"annotations":{"gateway.tetrate.io/edge-clusters":"corp-edge:0"}}}'
+
 kubectx west-cluster
-kubectl patch service web-portal -n transaction-service -p ‘{“metadata”:{“annotations”:{“gateway.tetrate.io/edge-clusters”:“corp-edge:100"}}}’
+kubectl patch service web-portal -n transaction-service -p '{"metadata":{"annotations":{"gateway.tetrate.io/edge-clusters":"corp-edge:100"}}}'
 ```
 
-While still generating traffic yuo can observe the topology view.
+### How Automatic Failover Works
+
+Tetrate Platform automatically discovers all services and their geographic locations. By default:
+1. Traffic routes to the nearest local services
+2. Clusters within the same region are prioritized
+3. If local clusters become unhealthy or unavailable, traffic automatically fails over to the next available region
+
+### Monitoring
+
+While traffic is being generated, observe the topology view to see real-time routing and failover behavior.
