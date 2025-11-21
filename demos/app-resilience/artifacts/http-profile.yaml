@@ -1,0 +1,38 @@
+apiVersion: profile.tsb.tetrate.io/v2
+kind: Profile
+metadata:
+  name: http-profile
+  annotations:
+    tsb.tetrate.io/organization: tetrate
+spec:
+  displayName: HTTP Profile
+  defaults:
+    traffic:
+      outbound:
+        upstreamTrafficSettings:
+        - hosts:
+            - "*"
+          settings:
+            resilience:
+              connectionPool:
+                http:
+                  requestTimeout: 3s
+                  retries:
+                    attempts: 3
+                    perTryTimeout: 10s
+                    retryOn: 5xx,gateway-error,connect-failure
+              circuitBreakerSensitivity: CUSTOM
+              outlierDetection:
+                consecutiveGatewayFailure: 1
+                enforcingConsecutiveGatewayFailure: 100
+                consecutive5xx: 1
+                interval: 1s
+  description: |-
+    Description: High-traffic or mission-critical services
+    Timeouts:
+      Request Timeout: 3s
+    Retries:
+      Retry Attempts: 3
+      Retry Conditions: 5xx,gateway-error,connect-failure
+      Retry Timeout per Attempt: 1s
+    Outlier Detection Sensitivity: CUSTOM

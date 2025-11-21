@@ -1,0 +1,42 @@
+version: "3"
+
+tasks:
+  default:
+    desc: "Show all available tasks"
+    cmds:
+      - task --list
+
+  cluster-outage:
+    desc: "Simulating cluster level outage"
+    silent: true
+    cmds:
+      - echo "Making your application cluster out of service..."
+      - kubectl scale -n tetrate-system deployment gateway --replicas=0 >/dev/null 2>&1
+
+  fix-cluster:
+    desc: "Revert cluster outage"
+    silent: true
+    cmds:
+      - echo "Resolving your cluster outage issue..."
+      - kubectl scale -n tetrate-system deployment gateway --replicas=1 >/dev/null 2>&1
+    
+  break-workload:
+    desc: "Making web-portal being unhealthy"
+    silent: true
+    cmds:
+      - echo "Making web-portal being unhealthy..."
+      - kubectl scale -n transaction-service deployment web-portal --replicas=0 >/dev/null 2>&1
+
+  fix-workload:
+    desc: "Fix web-portal workload"
+    silent: true
+    cmds:
+      - echo "Fixing web-portal, bringing it back to life..."
+      - kubectl scale -n transaction-service deployment web-portal --replicas=1 >/dev/null 2>&1
+
+  generate-traffic:
+    desc: "Traffic generator to online-banking.dynabank.com"
+    silent: true
+    cmds:
+      - echo "Generating traffic to online-banking.dynabank.com..."
+      - bash ./generate-traffic.sh
