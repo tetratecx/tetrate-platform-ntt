@@ -1,0 +1,25 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+  name: inter-cluster
+  namespace: argo-cd
+  annotations:
+    argocd.argoproj.io/display-name: "inter-cluster"
+spec:
+  project: default
+  syncPolicy:
+    automated:
+      prune: true
+    syncOptions:
+    - CreateNamespace=true
+  destination:
+    namespace: transaction-service
+    server: https://kubernetes.default.svc
+  source:
+    directory:
+      recurse: true
+    path: demos/inter-cluster/artifacts
+    repoURL: https://github.com/tetratecx/tetrate-platform-ntt.git

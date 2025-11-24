@@ -1,0 +1,267 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  labels:
+    kubernetes.io/metadata.name: transaction-service
+    istio-injection: enabled
+    tetrate.io/rev: default
+  name: transaction-service
+---
+##################################################################################################
+# Transaction Portal Service
+##################################################################################################
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    gateway.tetrate.io/expose: "global"
+    gateway.tetrate.io/edge-clusters: "corp-edge"
+    gateway.tetrate.io/host: "transactions.dynabank.com"
+    gateway.tetrate.io/auto-deploy: "true"
+    gateway.tetrate.io/cloud-annotations: |
+      service.beta.kubernetes.io/aws-load-balancer-type: "nlb"
+      service.beta.kubernetes.io/aws-load-balancer-scheme: "internet-facing"
+  name: transaction-portal
+  namespace: transaction-service
+  labels:
+    app: transaction-portal
+    service: transaction-portal
+spec:
+  ports:
+  - port: 9080
+    name: http
+  selector:
+    app: transaction-portal
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: transaction-portal
+  namespace: transaction-service
+  labels:
+    account: transaction-portal
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: transaction-portal-v2
+  namespace: transaction-service
+  labels:
+    app: transaction-portal
+    version: v2
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: transaction-portal
+      version: v2
+  template:
+    metadata:
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9080"
+        prometheus.io/path: "/metrics"
+      labels:
+        app: transaction-portal
+        version: v2
+    spec:
+      serviceAccountName: transaction-portal
+      containers:
+      - name: transaction-portal
+        image: us-east1-docker.pkg.dev/dogfood-cx/registryrepository/giraffe:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 9080
+        env:
+        - name: SERVICE_NAME
+          value: "transaction-portal"
+        - name: SERVICE_VERSION
+          value: "v2"
+        - name: SERVICE_PORT
+          value: "9080"
+        - name: UPSTREAM_URLS
+          value: "http://account-service:9080,http://fraud-detection:9080,http://risk-assessment:9080"
+        - name: OTEL_EXPORTER_OTLP_ENDPOINT
+          value: "otel-collector:4317"
+        - name: INCLUDE_HEADERS
+          value: "true"
+        - name: INCLUDE_QUERY
+          value: "true"
+        - name: RESPONSE_FIELD_PORTAL_VERSION
+          value: "enhanced"
+        - name: RESPONSE_FIELD_TRANSACTION_TYPE
+          value: "comprehensive"
+        - name: RESPONSE_FIELD_VENDOR_CHECK
+          value: "enabled"
+        - name: RESPONSE_DELAY_MS
+          value: "100"
+        - name: NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: NODE_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+---
+##################################################################################################
+# Account Service
+##################################################################################################
+apiVersion: v1
+kind: Service
+metadata:
+  name: account-service
+  namespace: transaction-service
+  labels:
+    app: account-service
+    service: account-service
+spec:
+  ports:
+  - port: 9080
+    name: http
+  selector:
+    app: account-service
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: transaction-account-service
+  namespace: transaction-service
+  labels:
+    account: account-service
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: account-service-v1
+  namespace: transaction-service
+  labels:
+    app: account-service
+    version: v1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: account-service
+      version: v1
+  template:
+    metadata:
+      labels:
+        app: account-service
+        version: v1
+    spec:
+      serviceAccountName: transaction-account-service
+      containers:
+      - name: account-service
+        image: us-east1-docker.pkg.dev/dogfood-cx/registryrepository/giraffe:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 9080
+        env:
+        - name: SERVICE_NAME
+          value: "account-service"
+        - name: SERVICE_VERSION
+          value: "v1"
+        - name: SERVICE_PORT
+          value: "9080"
+        - name: OTEL_EXPORTER_OTLP_ENDPOINT
+          value: "otel-collector:4317"
+        - name: CALL_UPSTREAMS
+          value: "false"
+        - name: RESPONSE_TEMPLATE
+          value: '{"service":"account-service","account_id":"12345","account_type":"checking","balance":1500.00,"status":"active","last_activity":"2024-01-01T10:00:00Z"}'
+        - name: NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: NODE_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+---
+##################################################################################################
+# Risk Assessment Service
+##################################################################################################
+apiVersion: v1
+kind: Service
+metadata:
+  name: risk-assessment
+  namespace: transaction-service
+  labels:
+    app: risk-assessment
+    service: risk-assessment
+spec:
+  ports:
+  - port: 9080
+    name: http
+  selector:
+    app: risk-assessment
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: transaction-risk-assessment
+  namespace: transaction-service
+  labels:
+    account: risk-assessment
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: risk-assessment-v1
+  namespace: transaction-service
+  labels:
+    app: risk-assessment
+    version: v1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: risk-assessment
+      version: v1
+  template:
+    metadata:
+      labels:
+        app: risk-assessment
+        version: v1
+    spec:
+      serviceAccountName: transaction-risk-assessment
+      containers:
+      - name: risk-assessment
+        image: us-east1-docker.pkg.dev/dogfood-cx/registryrepository/giraffe:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 9080
+        env:
+        - name: SERVICE_NAME
+          value: "risk-assessment"
+        - name: SERVICE_VERSION
+          value: "v1"
+        - name: SERVICE_PORT
+          value: "9080"
+        - name: OTEL_EXPORTER_OTLP_ENDPOINT
+          value: "otel-collector:4317"
+        - name: CALL_UPSTREAMS
+          value: "false"
+        - name: RESPONSE_TEMPLATE
+          value: '{"service":"risk-assessment","transaction_id":"txn-001","risk_score":75,"risk_level":"medium","factors":["unusual_amount","new_merchant"],"recommendation":"manual_review"}'
+        - name: NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: NODE_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
