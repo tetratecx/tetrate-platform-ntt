@@ -5,7 +5,7 @@ metadata:
   finalizers:
   - resources-finalizer.argocd.argoproj.io
   name: inter-cluster
-  namespace: argo-cd
+  namespace: argocd
   annotations:
     argocd.argoproj.io/display-name: "inter-cluster"
 spec:
@@ -15,6 +15,15 @@ spec:
       prune: true
     syncOptions:
     - CreateNamespace=true
+    - AllowSharedResource=true
+    - IgnoreInClusterResources=true
+    - PruneLast=true
+  ignoreDifferences:
+    - kind: Namespace
+      name: transaction-service
+      jsonPointers:
+        - /metadata/annotations/argocd.argoproj.io~1tracking-id
+        - /metadata/labels
   destination:
     namespace: transaction-service
     server: https://kubernetes.default.svc

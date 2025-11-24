@@ -4,10 +4,10 @@ kind: Application
 metadata:
   finalizers:
   - resources-finalizer.argocd.argoproj.io
-  name: inter-cluster
+  name: corp-app-resilience
   namespace: argocd
   annotations:
-    argocd.argoproj.io/display-name: "inter-cluster"
+    argocd.argoproj.io/display-name: "corp-app-resilience"
 spec:
   project: default
   syncPolicy:
@@ -18,18 +18,12 @@ spec:
     - AllowSharedResource=true
     - IgnoreInClusterResources=true
     - PruneLast=true
-  ignoreDifferences:
-    - kind: Namespace
-      name: transaction-service
-      jsonPointers:
-        - /metadata/annotations/argocd.argoproj.io~1tracking-id
-        - /metadata/labels
   destination:
-    namespace: transaction-service
+    namespace: tetrate-system
     server: https://kubernetes.default.svc
   source:
     directory:
       recurse: true
-      include: "{east-app.yaml}"
-    path: demos/inter-cluster/artifacts
+      include: "{online-banking-secret.yaml,http-profile.yaml,tenant-settings.yaml}"
+    path: demos/app-resilience/artifacts
     repoURL: https://github.com/tetratecx/tetrate-platform-ntt.git
