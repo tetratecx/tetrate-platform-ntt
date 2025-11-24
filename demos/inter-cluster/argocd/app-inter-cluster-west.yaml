@@ -21,5 +21,6 @@ spec:
   source:
     directory:
       recurse: true
+      include: "{west-app.yaml}"
     path: demos/inter-cluster/artifacts
     repoURL: https://github.com/tetratecx/tetrate-platform-ntt.git
