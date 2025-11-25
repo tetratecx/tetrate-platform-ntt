@@ -28,6 +28,10 @@ flowchart TB
     style TTG fill:#FFB6C1,stroke:#333
 ```
 
+### Why?
+
+This demo application includes an Ingress Gateway and is designed for hands-on experimentation. You can easily deploy it to any cluster and begin developing your use cases.
+
 1. Point your `kubectx` to the cluster where you;d like to install the app
 
 ```sh

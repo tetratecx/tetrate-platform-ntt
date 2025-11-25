@@ -1,0 +1,56 @@
+site_name: Tetrate Platform NTT Demos
+site_description: Documentation for Tetrate Platform demonstrations
+site_author: NTT Team
+repo_url: https://github.com/your-org/tetrate-platform-ntt
+repo_name: GitHub
+
+theme:
+  name: material
+  logo: assets/tetrate-logo.png
+  favicon: assets/tetrate-logo.png
+  palette:
+    primary: custom
+    accent: blue
+  features:
+    - navigation.sections
+    - navigation.top
+    - navigation.indexes
+    - toc.integrate
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+
+extra_css:
+  - stylesheets/extra.css
+
+nav:
+  - Home: index.md
+  - Demos:
+    - Access Artifacts: demos/access-artifacts.md
+    - App Resilience: demos/app-resilience.md
+    - Business Continuity: demos/business-continuity.md
+    - Cloud Migration: demos/cloud-migration.md
+    - Helm: demos/helm.md
+    - Inter Cluster: demos/inter-cluster.md
+    - Self Serve: demos/self-serve.md
+    #- Your New Demo: demos/your-new-demo.md  # <-- Just add this line 
+
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - admonition
+  - pymdownx.details
+  - attr_list
+  - md_in_html
+  - toc:
+      permalink: true
+
+plugins:
+  - search
