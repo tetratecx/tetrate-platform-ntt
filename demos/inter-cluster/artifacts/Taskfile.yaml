@@ -6,20 +6,6 @@ tasks:
     cmds:
       - task --list
 
-  break-workload:
-    desc: "Making risk-assessment being unhealthy"
-    silent: true
-    cmds:
-      - echo "Making risk-assessment being unhealthy..."
-      - kubectl scale --replicas=0 deployment -n transaction-service risk-assessment-v1
-
-  fix-workload:
-    desc: "Fix risk-assessment workload"
-    silent: true
-    cmds:
-      - echo "Fixing risk-assessment, bringing it back to life..."
-      - kubectl scale --replicas=1 deployment -n transaction-service risk-assessment-v1
-
   generate-traffic:
     desc: "Traffic generator to transactions.dynabank.com"
     silent: true
