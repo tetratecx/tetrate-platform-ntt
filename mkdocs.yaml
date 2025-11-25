@@ -28,8 +28,6 @@ nav:
   - Demos:
     - Access Artifacts: demos/access-artifacts.md
     - App Resilience: demos/app-resilience.md
-    - Business Continuity: demos/business-continuity.md
-    - Cloud Migration: demos/cloud-migration.md
     - Helm: demos/helm.md
     - Inter Cluster: demos/inter-cluster.md
     - Self Serve: demos/self-serve.md
