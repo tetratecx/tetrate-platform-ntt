@@ -1,0 +1,79 @@
+/* Cosmic dark blue header */
+:root {
+  --md-primary-fg-color: #0a1628;
+  --md-primary-fg-color--light: #1a2a45;
+  --md-primary-fg-color--dark: #050b14;
+}
+
+[data-md-color-scheme="default"] {
+  --md-primary-fg-color: #0a1628;
+  --md-primary-fg-color--light: #1a2a45;
+  --md-primary-fg-color--dark: #050b14;
+}
+
+/* Make the header have a cosmos-like gradient */
+.md-header {
+  background: linear-gradient(135deg, #0a1628 0%, #1a2a45 50%, #0f1f3a 100%);
+  box-shadow: 0 2px 8px rgba(10, 22, 40, 0.3);
+  position: relative;
+}
+
+/* Ensure text in header is visible */
+.md-header__title,
+.md-header__button {
+  color: rgba(255, 255, 255, 0.95);
+}
+
+/* Add NTT logo on the right side of header */
+.md-header::after {
+  content: "";
+  display: block;
+  position: absolute;
+  right: 60px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 100px;
+  height: 40px;
+  background-image: url('../assets/ntt-data-logo.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  z-index: 1;
+}
+
+/* Make Tetrate logo bigger and more prominent */
+.md-logo {
+  width: auto;
+  height: 35px;
+}
+
+.md-logo img {
+  height: 35px;
+  width: auto;
+}
+
+/* Style the GitHub link - push it more to the right to avoid NTT logo */
+.md-header__source {
+  color: rgba(255, 255, 255, 0.95);
+  margin-right: 120px;
+}
+
+/* Style the sidebar navigation */
+.md-nav {
+  font-size: 0.75rem;
+}
+
+.md-nav__title {
+  background: linear-gradient(135deg, #0a1628 0%, #1a2a45 100%);
+  color: rgba(255, 255, 255, 0.95);
+  font-weight: 700;
+}
+
+.md-nav__item--active > .md-nav__link {
+  color: #0a1628;
+}
+
+/* Sidebar background */
+.md-sidebar--primary {
+  background-color: #f8f9fa;
+}
