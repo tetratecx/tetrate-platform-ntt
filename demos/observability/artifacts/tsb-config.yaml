@@ -10,5 +10,6 @@ metadata:
 spec:
   namespaceSelector:
     names:
-      - "*/bookinfo"
+      - "corp-edge/bookinfo"
+      - "west-cluster/bookinfo"
 ---      
