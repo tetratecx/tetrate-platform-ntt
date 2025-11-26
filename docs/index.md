@@ -6,10 +6,11 @@ Welcome to the Tetrate Platform demonstration documentation.
 
 This documentation covers the following demonstration scenarios:
 
-- **Access Artifacts** - Access control and artifact management demonstrations
-- **App Resilience** - Application resilience and fault tolerance patterns
-- **Helm** - Helm chart deployments and management
-- **Inter Cluster** - Multi-cluster communication and management
-- **Self Serve** - Self-service platform capabilities
+- **[Access Artifacts](demos/access-artifacts.md)** - Go to [https://dynabank.cloud.tetrate.com/login](https://dynabank.cloud.tetrate.com/login) to access Tetrate Platform UI - admin access
+- **[Application Resilience](demos/application-resilience.md)** - This demo showcases how Tetrate Platform delivers intelligent failover across infrastructure, clusters, workloads, and gateways—eliminating downtime caused by failures that traditional load balancers can't detect.
+- **[Helm](demos/helm.md)** - ```mermaid
+- **[Inter Cluster](demos/inter-cluster.md)** - Welcome to the **Inter-cluster Routing Demo**.  
+- **[Self Serve](demos/self-serve.md)** - **Goal**: From URL access to exposing your first API through Tetrate in few minutes.
+- **[Service Failover](demos/service-failover.md)** - Welcome to the Service Failover Demo.
 
-Navigate through the tabs above to explore each demonstration area.
+Navigate through the tabs in the left sidebar to explore each demonstration area.

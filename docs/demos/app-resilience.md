@@ -1,1 +1,0 @@
-../../demos/app-resilience/artifacts/Readme.md

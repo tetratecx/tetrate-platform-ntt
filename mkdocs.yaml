@@ -32,7 +32,6 @@ nav:
     - Inter Cluster: demos/inter-cluster.md
     - Self Serve: demos/self-serve.md
     - Service Failover via East-West Gateway: demos/service-failover.md
-    #- Your New Demo: demos/your-new-demo.md  # <-- Just add this line 
 
 markdown_extensions:
   - pymdownx.highlight:
