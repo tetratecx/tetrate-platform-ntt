@@ -1,0 +1,82 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36" version="29.1.1" pages="4">
+  <diagram id="BoxIngressDiagram" name="Box Ingress Architecture">
+    <mxGraphModel dx="1405" dy="717" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1200" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="clients" value="External Clients / Apps" style="rounded=1;whiteSpace=wrap;html=1;fontSize=14;fontStyle=1;strokeColor=#000000;fillColor=#ffffff;" parent="1" vertex="1">
+          <mxGeometry x="500" y="50" width="300" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="lb" value="Load Balancer" style="rounded=1;whiteSpace=wrap;html=1;fontSize=14;fontStyle=0;strokeColor=#000000;fillColor=#ffffff;" parent="1" vertex="1">
+          <mxGeometry x="500" y="150" width="300" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow1" style="endArrow=block;jettySize=10;html=1;" parent="1" source="clients" target="lb" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="nginx" value="NGINX Ingress Layer&#xa;(Puppet + Hiera Templated)&#xa;• 382 location blocks&#xa;• 174 proxy_pass rules&#xa;• ~19 config templates" style="rounded=1;whiteSpace=wrap;html=1;fontSize=13;strokeColor=#000000;fillColor=#e6f2ff;fontStyle=1;" parent="1" vertex="1">
+          <mxGeometry x="420" y="260" width="480" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow2" style="endArrow=block;jettySize=10;html=1;" parent="1" source="lb" target="nginx" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="dynamic" value="Dynamic Endpoint Discovery Daemon&#xa;(16 Services)&#xa;• Discovers pods via K8s API&#xa;• Updates NGINX upstreams dynamically" style="rounded=1;whiteSpace=wrap;html=1;fontSize=13;strokeColor=#000000;fillColor=#fff2e6;" parent="1" vertex="1">
+          <mxGeometry x="200" y="420" width="360" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="dns" value="DNS-Based Routing (2 Services)&#xa;• One mesh-compatible&#xa;• One Stateful rewrite → pod-specific hostname" style="rounded=1;whiteSpace=wrap;html=1;fontSize=13;strokeColor=#000000;fillColor=#fff2e6;" parent="1" vertex="1">
+          <mxGeometry x="680" y="420" width="360" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow3" style="endArrow=block;jettySize=10;html=1;" parent="1" source="nginx" target="dynamic" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow4" style="endArrow=block;jettySize=10;html=1;" parent="1" source="nginx" target="dns" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="gateway" value="Internal API Gateway (1 of 16)&#xa;• 281 path rules&#xa;• 77 backend services&#xa;• 57 routes → monolith&#xa;• JSON + regex structure" style="rounded=1;whiteSpace=wrap;html=1;fontSize=13;strokeColor=#000000;fillColor=#d9ffcc;" parent="1" vertex="1">
+          <mxGeometry x="420" y="590" width="480" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow5" style="endArrow=block;jettySize=10;html=1;" parent="1" source="dynamic" target="gateway" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow6" style="endArrow=block;jettySize=10;html=1;" parent="1" source="dns" target="gateway" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="backend" value="Kubernetes Backend Services&#xa;• Microservices&#xa;• Stateful workloads&#xa;• Monolith (primary consumer of routing)" style="rounded=1;whiteSpace=wrap;html=1;fontSize=13;fontStyle=0;strokeColor=#000000;fillColor=#ffffff;" parent="1" vertex="1">
+          <mxGeometry x="450" y="760" width="420" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow7" style="endArrow=block;jettySize=10;html=1;" parent="1" source="gateway" target="backend" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="WjsFUG6dASUEwxjV8j4N" name="Page-2">
+    <mxGraphModel dx="1805" dy="717" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="6BcuubdHRhwHq20zHow8-1" value="┌──────────────────────────────────────────┐&#xa;                 │         External Clients                 │&#xa;                 └──────────────────────────────────────────┘&#xa;                                  │&#xa;                                  ▼&#xa;                 ┌──────────────────────────────────────────┐&#xa;                 │          Load Balancer (Public)         │&#xa;                 └──────────────────────────────────────────┘&#xa;                                  │&#xa;                                  ▼&#xa;                 ┌──────────────────────────────────────────┐&#xa;                 │   NGINX Ingress (Puppet/Hiera Managed)  │&#xa;                 │  • 382 location blocks                  │&#xa;                 │  • 174 proxy_pass routes                │&#xa;                 │  • ~19 reusable routing templates       │&#xa;                 └──────────────────────────────────────────┘&#xa;            ┌───────────────┴───────────────────────────┴────────────────┐&#xa;            │                                                            │&#xa;            ▼                                                            ▼&#xa;┌───────────────────────────┐                                ┌───────────────────────────────┐&#xa;│ Dynamic Endpoint Discovery│                                │ DNS-Based Routing             │&#xa;│ (Sidecar for 16 services) │                                │ 2 special services            │&#xa;│ Pulls pod IPs → updates   │                                │  • 1 mesh-compatible          │&#xa;│ upstreams dynamically     │                                │  • 1 requiring URL rewrite   │&#xa;└───────────────────────────┘                                └───────────────────────────────┘&#xa;                                  │&#xa;                                  ▼&#xa;                 ┌──────────────────────────────────────────┐&#xa;                 │          In-House API Gateway            │&#xa;                 │   • 281 path rules                      │&#xa;                 │   • 77 backend services                 │&#xa;                 │   • 57 routes → monolith               │&#xa;                 │   JSON rule format w/ regex matching   │&#xa;                 └──────────────────────────────────────────┘&#xa;                                  │&#xa;                                  ▼&#xa;                 ┌──────────────────────────────────────────┐&#xa;                 │        Kubernetes Workloads              │&#xa;                 │   (monolith + microservices + stateful)  │&#xa;                 └──────────────────────────────────────────┘" style="text;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="-140" y="200" width="560" height="770" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="LdJ2xULNI3tzn-h9nAVR" name="Page-3">
+    <mxGraphModel dx="2205" dy="1117" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="TDPwcX6KUKFccgDR5eGN-1" value="┌─────────────────────────────────────┐&#xa;                                │        External Clients / Apps      │&#xa;                                └─────────────────────────────────────┘&#xa;                                                     │&#xa;                                                     ▼&#xa;                                ┌─────────────────────────────────────┐&#xa;                                │            Load Balancer            │&#xa;                                └─────────────────────────────────────┘&#xa;                                                     │&#xa;                                                     ▼&#xa;                     ┌───────────────────────────────────────────────────────────────┐&#xa;                     │                        NGINX Ingress                          │&#xa;                     │         (Puppet/Hiera Generated Configuration)                │&#xa;                     └───────────────────────────────────────────────────────────────┘&#xa;                                                     │&#xa;     ┌────────────────────────────────────────────────┴─────────────────────────────────────────────────┐&#xa;     │                                                                                                 │&#xa;     │                                                                                                 │&#xa;     ▼                                                                                                 ▼&#xa;┌───────────────┐                                                                        ┌─────────────────────────┐&#xa;│ Dynamic Pod   │                                                                        │ DNS-Based Routing       │&#xa;│ Discovery     │                                                                        │ (2 Services)            │&#xa;│ Sidecar/Daemon│                                                                        │                         │&#xa;│ (16 Services) │                                                                        │  • Service #1 → Likely  │&#xa;│               │                                                                        │    Mesh-Compatible      │&#xa;│ Discovers K8s │                                                                        │  • Service #2 →        │&#xa;│ Endpoints →   │                                                                        │    Stateful Pod Rewrite │&#xa;│ Updates NGINX │                                                                        │    via Generated Host   │&#xa;└───────────────┘                                                                        └─────────────────────────┘&#xa;     │                                                                                                 │&#xa;     │                                                                                                 │&#xa;     └───────────────Routing to Backend Services────────────────────────────────────────────────────────┘&#xa;                                                     │&#xa;                                                     ▼&#xa;                                ┌─────────────────────────────────────┐&#xa;                                │     In-House API Gateway (1 of 16) │&#xa;                                │─────────────────────────────────────│&#xa;                                │  • 281 Routes                       │&#xa;                                │  • 77 Unique Service Targets        │&#xa;                                │    • 57 Routes → Monolith          │&#xa;                                │  • JSON Configuration w/ regex     │&#xa;                                └─────────────────────────────────────┘&#xa;                                                     │&#xa;                                                     ▼&#xa;     ┌──────────────────────────────────────────────────────────────────────────────────────────────┐&#xa;     │                             Backend Kubernetes Workloads                                      │&#xa;     │                                                                                               │&#xa;     │  ┌─────────────┐   ┌─────────────┐   ┌─────────────┐     ┌──────────────────────────────┐   │&#xa;     │  │ Microservice│   │ Microservice│   │ Stateful     │     │ Monolith Application         │   │&#xa;     │  │ (Mesh Ready?)│ │ (Mesh Ready?)│   │ Pod Targeted │     │ (Receives 57 Paths)          │   │&#xa;     │  └─────────────┘   └─────────────┘   └─────────────┘     └──────────────────────────────┘   │&#xa;     └──────────────────────────────────────────────────────────────────────────────────────────────┘" style="text;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="-500" y="-160" width="560" height="1060" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="8PUpV_TkWMr2eiQkhzh7" name="Page-4">
+    <mxGraphModel dx="1405" dy="717" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

@@ -31,5 +31,5 @@ spec:
     directory:
       recurse: true
       include: "{app.yaml}"
-    path: demos/app-resilience/artifacts
+    path: demos/application-resilience/artifacts
     repoURL: https://github.com/tetratecx/tetrate-platform-ntt.git

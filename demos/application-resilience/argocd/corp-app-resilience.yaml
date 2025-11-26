@@ -25,5 +25,5 @@ spec:
     directory:
       recurse: true
       include: "{online-banking-secret.yaml,http-profile.yaml,tenant-settings.yaml}"
-    path: demos/app-resilience/artifacts
+    path: demos/application-resilience/artifacts
     repoURL: https://github.com/tetratecx/tetrate-platform-ntt.git
