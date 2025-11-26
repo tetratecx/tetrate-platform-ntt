@@ -3,7 +3,10 @@
 Welcome to the **Inter-cluster Routing Demo**.  
 Organizations running across multiple clusters, regions, or clouds often struggle with inefficient routing. Traffic usually takes the long way around — creating delays, security gaps, and complexity.
 
-![image](inter-cluster.png)
+<figure markdown>
+  ![Inter Cluster](../images/inter-cluster/inter-cluster.png)
+  <figcaption>Cross-cluster communications via East-West Gateway</figcaption>
+</figure>
 
 ## Overview
 

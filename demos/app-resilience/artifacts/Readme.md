@@ -4,6 +4,11 @@
 
 This demo showcases how Tetrate Platform delivers intelligent failover across infrastructure, clusters, workloads, and gateways—eliminating downtime caused by failures that traditional load balancers can't detect.
 
+<figure markdown>
+  ![Application Resilience](../images/app-resilience/app-res-before.png)
+  <figcaption>Nort-South Traffic to the local cluster - same region</figcaption>
+</figure>
+
 ### The Problem
 
 Modern distributed systems face failures at every level:
@@ -24,6 +29,11 @@ Traditional gateways and load balancers can't detect these failures in real-time
 ### The Solution
 
 Tetrate Platform provides intelligent, automated failover at every layer of your infrastructure.
+
+<figure markdown>
+  ![Application Resilience](../images/app-resilience/app-res-after.png)
+  <figcaption>Nort-South Traffic to the remote cluster -  next available cluster in different region or cloud provider</figcaption>
+</figure>
 
 ## Prerequisites
 
@@ -106,3 +116,17 @@ Tetrate Platform automatically discovers all services and their geographic locat
 ### Monitoring
 
 While traffic is being generated, observe the topology view to see real-time routing and failover behavior.
+
+## Why It Matters — For the Business, the Product, and the End Users
+
+**For the Product:**  
+Tetrate delivers intelligent, application-aware resiliency across clusters and regions. Traffic instantly reroutes to healthy services — no code changes, no manual intervention, no fragile workarounds. Upgrades, outages, and failures become invisible events, not outages.
+
+**For the Business:**  
+Downtime is expensive. Tetrate protects revenue, SLAs, and brand trust by ensuring applications remain secure, available, and performant — even during cluster failures or regional outages. One platform simplifies operations, reduces tickets, and accelerates recovery, dramatically lowering operational risk.
+
+**For End Users:**  
+No broken logins. No failed orders. No spinning wheels. With seamless failover and low-latency global routing, users stay connected and satisfied — regardless of what fails behind the scenes.
+
+**In one line:**  
+Tetrate keeps your business running, your product resilient, and your users happy — even when everything else fails.

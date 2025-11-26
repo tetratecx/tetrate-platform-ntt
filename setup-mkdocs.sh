@@ -9,9 +9,11 @@ echo "Setting up MkDocs documentation..."
 mkdir -p docs/demos
 mkdir -p docs/stylesheets
 mkdir -p docs/assets
+mkdir -p docs/images
 
-# Remove old symlinks
+# Remove old symlinks and copied files
 rm -f docs/demos/*.md
+rm -rf docs/images/*
 
 # Discover and create symlinks for all demos
 echo ""
@@ -24,6 +26,22 @@ for demo_dir in demos/*/; do
     if [ -f "${demo_dir}artifacts/Readme.md" ]; then
       ln -sf "../../${demo_dir}artifacts/Readme.md" "docs/demos/${demo_name}.md"
       echo "✓ Linked ${demo_name} -> ${demo_dir}artifacts/Readme.md"
+      
+      # Copy any image files from artifacts directory
+      image_count=0
+      for ext in png jpg jpeg gif svg; do
+        for img in "${demo_dir}artifacts/"*."$ext"; do
+          if [ -f "$img" ]; then
+            mkdir -p "docs/images/${demo_name}"
+            cp "$img" "docs/images/${demo_name}/"
+            ((image_count++))
+          fi
+        done
+      done
+      
+      if [ $image_count -gt 0 ]; then
+        echo "  ↳ Copied $image_count image(s) for ${demo_name}"
+      fi
     else
       echo "✗ Skipped ${demo_name} (no artifacts/Readme.md found)"
     fi
@@ -33,5 +51,5 @@ done
 echo ""
 echo "✓ MkDocs structure updated successfully!"
 echo ""
-echo "To update mkdocs.yml navigation, run:"
-echo "./generate-nav.sh"
+echo "Note: Update image paths in your Readme.md files to use:"
+echo "../images/demo-name/image.png"
