@@ -9,6 +9,7 @@ metadata:
   labels:
     app: details
     service: details
+    traffic.tetrate.io/global: "true"
 spec:
   ports:
   - port: 9080
