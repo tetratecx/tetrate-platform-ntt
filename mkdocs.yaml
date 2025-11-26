@@ -27,7 +27,7 @@ nav:
   - Home: index.md
   - Demos:
     - Access Artifacts: demos/access-artifacts.md
-    - Application Resilience: demos/app-resilience.md
+    - Application Resilience: demos/application-resilience.md
     - Helm: demos/helm.md
     - Inter Cluster: demos/inter-cluster.md
     - Self Serve: demos/self-serve.md
