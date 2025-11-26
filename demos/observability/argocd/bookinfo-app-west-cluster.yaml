@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: observability-bookinfo-corp-edge
+  name: observability-bookinfo-west-cluster
   namespace: argocd
 spec:
   destination:
