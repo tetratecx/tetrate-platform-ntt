@@ -207,5 +207,30 @@ spec:
         emptyDir: {}
 ---        
 ##################################################################################################
-# Traffic generator
+# Traffic generator pod
 ##################################################################################################
+apiVersion: v1
+kind: Pod
+metadata:
+  name: client
+  namespace: bookinfo
+  annotations:
+    sidecar.istio.io/inject: "false"  
+spec:
+  containers:
+  - name: fortio
+    image: fortio/fortio:latest_release
+    args:
+      - load
+      - -c
+      - "1"
+      - -qps
+      - "30"
+      - -t
+      - "0"
+      - -H
+      - "X-B3-Sampled: 1"
+      - -loglevel
+      - "debug"
+      - http://bookinfo.sandbox.tetrate.io/productpage
+---      
