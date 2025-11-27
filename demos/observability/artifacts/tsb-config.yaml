@@ -62,7 +62,7 @@ spec:
     labels:
       app: bookinfo-gw
   http:
-    - hostname: bookinfo.tetrate.io
+    - hostname: bookinfo.sandbox.tetrate.io
       name: bookinfo-tetrate
       port: 80
       routing:
