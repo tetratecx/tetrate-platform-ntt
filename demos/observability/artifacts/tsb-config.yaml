@@ -46,25 +46,27 @@ spec:
     names:
       - "corp-edge/bookinfo"
 ---
-apiVersion: networking.istio.io/v1beta1
+apiVersion: gateway.tsb.tetrate.io/v2
 kind: Gateway
 metadata:
-  name: bookinfo-gateway
-  namespace: gitops
-  labels:
-    istio.io/rev: tsb
+  name: bookinfo-gw
   annotations:
     tsb.tetrate.io/organization: tetrate
-    tsb.tetrate.io/tenant: tetrate
+    tsb.tetrate.io/tenant: default
     tsb.tetrate.io/workspace: bookinfo
     tsb.tetrate.io/gatewayGroup: bookinfo-gg
 spec:
-  selector:
-    app: bookinfo-gw
-  servers:
-    - hosts:
-        - "bookinfo.tetrate.io"
-      port:
-        number: 80
-        name: http
-        protocol: HTTP
+  workloadSelector:
+    namespace: bookinfo
+    labels:
+      app: bookinfo-gw
+  http:
+    - hostname: bookinfo.tetrate.io
+      name: bookinfo-tetrate
+      port: 80
+      routing:
+        rules:
+          - route:
+              serviceDestination:
+                host: bookinfo/productpage.bookinfo.svc.cluster.local
+---
