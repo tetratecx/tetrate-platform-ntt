@@ -21,7 +21,7 @@ metadata:
   annotations:
     tsb.tetrate.io/organization: tetrate
     tsb.tetrate.io/tenant: default
-    tsb.tetrate.io/tenant: bookinfo
+    tsb.tetrate.io/workspace: bookinfo
 spec:
   defaultEastWestGatewaySettings:
     - workloadSelector:
