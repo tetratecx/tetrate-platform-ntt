@@ -19,3 +19,6 @@ spec:
       enabled: true
     syncOptions:
     - CreateNamespace=true
+    - AllowSharedResource=true
+    - IgnoreInClusterResources=true
+    - PruneLast=true    
