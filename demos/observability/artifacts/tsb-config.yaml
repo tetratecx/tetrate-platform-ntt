@@ -13,3 +13,19 @@ spec:
       - "corp-edge/bookinfo"
       - "west-cluster/bookinfo"
 ---      
+apiVersion: api.tsb.tetrate.io/v2
+kind: WorkspaceSetting
+metadata:
+  name: bookinfo-ws-setting
+  namespace: gitops
+  annotations:
+    tsb.tetrate.io/organization: tetrate
+    tsb.tetrate.io/tenant: default
+    tsb.tetrate.io/tenant: bookinfo
+spec:
+  defaultEastWestGatewaySettings:
+    - workloadSelector:
+        namespace: tetrate-system
+        labels:
+          app: details
+---          
