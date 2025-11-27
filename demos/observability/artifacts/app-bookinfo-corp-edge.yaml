@@ -6,6 +6,20 @@ metadata:
     istio-injection: enabled
   name: bookinfo
 ---
+apiVersion: install.tetrate.io/v1alpha1
+kind: Gateway
+metadata:
+  name: bookinfo-gw
+spec:
+  type: UNIFIED
+  kubeSpec:
+    service:
+      type: LoadBalancer
+      annotations:
+        service.beta.kubernetes.io/aws-load-balancer-attributes: load_balancing.cross_zone.enabled=true
+        service.beta.kubernetes.io/aws-load-balancer-scheme: internet-facing
+        service.beta.kubernetes.io/aws-load-balancer-type: external
+---
 ##################################################################################################
 # Productpage services
 ##################################################################################################

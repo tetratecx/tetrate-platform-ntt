@@ -31,4 +31,40 @@ spec:
       exposedServices:
         - serviceLabels:
             app: details
----          
+---
+apiVersion: gateway.tsb.tetrate.io/v2
+kind: Group
+metadata:
+  name: bookinfo-gg
+  namespace: gitops  
+  annotations:
+    tsb.tetrate.io/organization: tetrate
+    tsb.tetrate.io/tenant: default
+    tsb.tetrate.io/workspace: bookinfo
+spec:
+  namespaceSelector:
+    names:
+      - "corp-edge/bookinfo"
+---
+apiVersion: networking.istio.io/v1beta1
+kind: Gateway
+metadata:
+  name: bookinfo-gateway
+  namespace: gitops
+  labels:
+    istio.io/rev: tsb
+  annotations:
+    tsb.tetrate.io/organization: tetrate
+    tsb.tetrate.io/tenant: tetrate
+    tsb.tetrate.io/workspace: bookinfo
+    tsb.tetrate.io/gatewayGroup: bookinfo-gg
+spec:
+  selector:
+    app: bookinfo-gw
+  servers:
+    - hosts:
+        - "bookinfo.tetrate.io"
+      port:
+        number: 80
+        name: http
+        protocol: HTTP
