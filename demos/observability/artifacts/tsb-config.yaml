@@ -13,7 +13,7 @@ spec:
       - "corp-edge/bookinfo"
       - "west-cluster/bookinfo"
 ---      
-apiVersion: api.tsb.tetrate.io/v2
+apiVersion: tsb.tetrate.io/v2
 kind: WorkspaceSetting
 metadata:
   name: bookinfo-ws-setting
