@@ -27,5 +27,8 @@ spec:
     - workloadSelector:
         namespace: tetrate-system
         labels:
-          app: details
+          app: east-west-gateway
+      exposedServices:
+        - serviceLabels:
+            app: details
 ---          
