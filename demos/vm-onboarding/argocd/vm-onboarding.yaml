@@ -1,0 +1,24 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: mv-onboarding
+  namespace: argocd
+spec:
+  destination:
+    namespace: vm
+    server: https://corp-edge.aws.scratch.caas.tetrate.com:443
+  project: default
+  source:
+    directory:
+      include: "{vm-onboarding.yaml}"
+    path: demos/mv-onboarding/artifacts
+    repoURL: https://github.com/tetratecx/tetrate-platform-ntt
+    targetRevision: HEAD
+  syncPolicy:
+    automated:
+      enabled: true
+    syncOptions:
+    - CreateNamespace=true
+    - AllowSharedResource=true
+    - IgnoreInClusterResources=true
+    - PruneLast=true    

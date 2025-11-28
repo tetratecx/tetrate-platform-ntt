@@ -1,0 +1,92 @@
+---
+##################################################################################################
+# vm namespace
+##################################################################################################
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: vm
+---
+##################################################################################################
+# onboarding endpoint tls certificate secret
+##################################################################################################
+apiVersion: v1
+data:
+  tls.crt: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURZakNDQWtxZ0F3SUJBZ0lVQVRQSXEvUnVtMTl1c3hObDdCeThxWnJVUkJFd0RRWUpLb1pJaHZjTkFRRUwKQlFBd0ZURVRNQkVHQTFVRUF3d0tSWGhoYlhCc1pTQkRRVEFlRncweU5URXhNamN5TVRFME16aGFGdzB6TlRFeApNalV5TVRFME16aGFNQ1l4SkRBaUJnTlZCQU1NRzI5dVltOWhjbVJwYm1jdFpXNWtjRzlwYm5RdVpYaGhiWEJzClpUQ0NBU0l3RFFZSktvWklodmNOQVFFQkJRQURnZ0VQQURDQ0FRb0NnZ0VCQUthRTJiUzU4bFZUMnZ1aks5azQKWUp6QXJmNEhTdXErWlR6YXBpTldkNE0vR1l5bXZ2RnhvaVRPUnREVTRUK3ZyQ3JwK2RyUHhqQ2p2NTIrUkIyRApGOFVYUVZaTkZMYlJ6MmxiOXVTR3JPSmQ5UVdocHUya2FhbGIxQm4xWGNWeE9tUVB5MmhpSlB0NDFqL2hoNU9iCmFZK2tqdDV5bXZFYzl5QldkL1BpNThqemI0Z1VuaHRPYkV1dmFZVjVBemNBM0Z3WU9iUzZMZGk5TTRaK3ExZFoKRUxqOU9XTlNpbUxBSXFPNkRkY2luYWtpUjBtWVE0QTRra0tQTXhoQktuV0I4eVdidmJEWXRyelRuMllOU1drRgpjOTdpTGJZQlBKTDZ2dUFyUDQvUWhwS3R5SlFYZWRvZVNwVitlNys3NXdNTVo3S2VmUTFPUVRCWW9ERTFZSXlyCnpURUNBd0VBQWFPQm1EQ0JsVEFKQmdOVkhSTUVBakFBTUIwR0ExVWREZ1FXQkJSR3p1eWdCY01pNkJENktpU0sKRzIvcHJFM2x2ekFmQmdOVkhTTUVHREFXZ0JSRTR3RU9scDVDWFRRM0wzcER2NlRRSTU4Z0FUQUxCZ05WSFE4RQpCQU1DQmFBd0V3WURWUjBsQkF3d0NnWUlLd1lCQlFVSEF3RXdKZ1lEVlIwUkJCOHdIWUliYjI1aWIyRnlaR2x1Clp5MWxibVJ3YjJsdWRDNWxlR0Z0Y0d4bE1BMEdDU3FHU0liM0RRRUJDd1VBQTRJQkFRQjVzK0h6TER3QzI0a3IKKzFTY3I5SVRZWDhDNzJLM0I4TTZINkQ0eFVMbW53Mm5CN1JHMThpdHJtQ0dVamdTK3c0eTBwZG90R0xvVHMwcQprbmRRNkZwRStGYXptSFR4OVArNkJUTll3eU10Q3dnUDVVVjZUazQ5aVA3VUgvSGt5bFo0bkNZU3JsMzRwNktWCmg3NlptaGljaGlJYjZNZlZ1NVF1YU5LbUJLVmdtQmhSa3F4WUhZaWNzSVNIeVltYytnbEQ5T0hQRHFRVUxyTzcKZGpFWnZYcTQ2MFFuMmpPWnJDTUJ4SEJhdGZmcEpuQndScUt6TEpXRjhCT2YzRTlwSVQ1eWl1eEpJT0E2a2xwYwptdVJEczJTcXRKb1JBSUZXUmJjUW5wUXFZNFNVUFVpR1hsRnZpRVVkRHNYblFQWmtMYlcweFVQcjFmNHpLNDNQClhoV2N2clVHCi0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K
+  tls.key: LS0tLS1CRUdJTiBQUklWQVRFIEtFWS0tLS0tCk1JSUV2UUlCQURBTkJna3Foa2lHOXcwQkFRRUZBQVNDQktjd2dnU2pBZ0VBQW9JQkFRQ21oTm0wdWZKVlU5cjcKb3l2Wk9HQ2N3SzMrQjBycXZtVTgycVlqVm5lRFB4bU1wcjd4Y2FJa3prYlExT0UvcjZ3cTZmbmF6OFl3bzcrZAp2a1FkZ3hmRkYwRldUUlMyMGM5cFcvYmtocXppWGZVRm9hYnRwR21wVzlRWjlWM0ZjVHBrRDh0b1lpVDdlTlkvCjRZZVRtMm1QcEk3ZWNwcnhIUGNnVm5mejR1Zkk4MitJRko0YlRteExyMm1GZVFNM0FOeGNHRG0wdWkzWXZUT0cKZnF0WFdSQzQvVGxqVW9waXdDS2p1ZzNYSXAycElrZEptRU9BT0pKQ2p6TVlRU3AxZ2ZNbG03MncyTGE4MDU5bQpEVWxwQlhQZTRpMjJBVHlTK3I3Z0t6K1AwSWFTcmNpVUYzbmFIa3FWZm51L3UrY0RER2V5bm4wTlRrRXdXS0F4Ck5XQ01xODB4QWdNQkFBRUNnZ0VBQjlFZnVTeXJkQmI2Smlyc1FZZTBmVmRNTTZzYStMY1VZSTF4RkNLWWZLaEgKSmtPam5najBFQjlBMHNmVGhSNVZpalF1bnZkMitjeU9EN1VoVkhOVmQ5S1dKaHQ3Ti9QVWRVRTBiMWpsSDhGQwpZYy9MV3NlSGtFUTN5am9xK3p4TC9ldUI1SFlLLzJVV1JheHNKV0U3ek5yd1BBQU1SdnBSbllxQm1nalNVYXdNCldZUDlJbXlwRVZZVzllZ3loenVxWmlGZ2VqYjVKQm50aDdPZmJTMS9Oa1hCNzF6MUdSb3FlS0RFN3licTFBT0MKcGFHQ3U0QW15WFJ2VUFwK0hvOXcyWmt4NWdObm1obGxOZTh4QVJxZi8wK25EeGJqMXBnQ3kza3E0SGVUd3VDMQprcWgvaHQ2VmhFQmh6bURPYTRFbkFDcUUyWnFad0xOa003ZnJPdW9aaXdLQmdRRGtucmFoOVdkQVBEVDVWWEtTCnhscnVFOHdnSWdXWmxnWmxUSFcvZ3VjNHB6c29aQ3JaZ0d4OFVEdEFGTElNWHhKZEFCbitkSGk3VWRFMXBJWVYKWFZYZCtrc1ZQeTNINVBIWk1HU1FjbWJQOVlUZElod1h6RktuUWxHNldDMmRESjZMVUtJMlczeUx4OE5WTlRWeQp4Z1Fsc0tNZ0RSRjVsQm0waGg0ZkRCYVhPd0tCZ1FDNmRpeWd5Z05XLzNKczNBS1RSUklpNDVhbC9CakhHTHBxCkVpbnlDN1FXNmNjS3RFWVEvUVFDbi9KV2NOeitZcDk3ci9SN29iUy9vZUYvdzJGZCs3VjQ1UlMwVTIvTk9iMGkKcS9QSXltSE41YVl0Vy9DTXRWeDJXcWphcWc1UnRValRZMUozUTJCRWRIUWY4aDAxV0tjR1hEa2ExbTJERDRYegpHMHFhQXZLZWd3S0JnRVdWVlFzSWNVdW94NHJZQ2c1SVZ5YTlXZFN4NWpodjVEUnl5Q2ZwQk0xR2dRZnpMT09VClpmQ1VUdVJiS0RJQndjb1NuTmJJeG5KbEhhTVJGMHByWlJZeDl5WlpXMnJLOFIxazBFYnl1djR5d1NTNUhBblcKUTVYcTVvc3NDWDRTZURMNDhOWlFsQ0RMUlZXcTQwQ3lxbEo2Wjd2Nm5rWDk0TEVFWFNpZitrUS9Bb0dBRklOdgp3WGk0Q1ZndEZJRFgzNi9Yb1BMODNlSHdMK2N1aXdEWWtJSnRHNkE0ZjVyNW9tRFRraDVhb052bDFDNnhjUUFZCm00bGN3MEJoK0paY0hlVFZRQ21qcjNzR2I4T01aVVlabWR0NkN4YmF3MTY4Qmg3bHZ6ZVdJQWhaYnUvTXhVVEcKQzh6anlHUXZhbHhPamxIa2ZqU2pLNnF2ZloyMWxOdEp4OHZQT1ZVQ2dZRUEza3IyTU80RTFEVGVrcmNQRDJENgpaWEEyT3NGSUQzcDdqSGF0K2I2SDl3MXB2TXdhRlROZThrUUJXTzNlTlpHL2VqNmZGMGt2SERXbnd5R0RuWlZsCkV2TWZ0NGNubjRtU1hSOFduTDBGWVhvZWFCTUQ5MkV0K2dQaXNaanNuaU05WkFxLzV1UDNUNnVHZ1dGMWFzNkwKbG9TRjY1bnJNNVAzOXlnSGxDVmo1dmM9Ci0tLS0tRU5EIFBSSVZBVEUgS0VZLS0tLS0K
+kind: Secret
+metadata:
+  name: onboarding-endpoint-tls-cert
+  namespace: istio-system
+type: kubernetes.io/tls
+---
+##################################################################################################
+# vm Service 
+##################################################################################################
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysqldb
+  namespace: vm
+spec:
+  selector:
+    app: mysqldb
+  ports:
+  - port: 9080
+    name: tcp
+---
+##################################################################################################
+# vm WorkloadGroup 
+##################################################################################################
+apiVersion: networking.istio.io/v1alpha3
+kind: WorkloadGroup
+metadata:
+  name: mysqldb
+  namespace: vm
+  labels:
+    app: mysqldb
+spec:
+  template:
+    labels:
+      app: mysqldb
+---
+##################################################################################################
+# OnboardingPolicy
+##################################################################################################
+apiVersion: authorization.onboarding.tetrate.io/v1alpha1
+kind: OnboardingPolicy
+metadata:
+  name: allow-mysqldb
+  namespace: vm
+spec:
+  allow:
+  - workloads:
+    - aws:
+        regions:
+        - us-east-2
+        accounts:
+        - '741448964340'          
+        ec2: {}        
+    onboardTo:
+    - workloadGroupSelector:
+        matchLabels:
+          app: mysqldb
+---
+##################################################################################################
+# Sidecar
+##################################################################################################
+apiVersion: networking.istio.io/v1beta1
+kind: Sidecar
+metadata:
+  name: mysqldb-no-iptables
+  namespace: vm
+spec:
+  ingress:
+  - defaultEndpoint: 127.0.0.1:3306
+    port:
+      name: mysql
+      number: 9080
+      protocol: TCP
+  workloadSelector:
+    labels:
+      app: mysqldb
