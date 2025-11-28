@@ -140,7 +140,7 @@ spec:
           - name: MYSQL_DB_HOST
             value: mysqldb.vm.svc.cluster.local
           - name: MYSQL_DB_PORT
-            value: "3306"
+            value: "9080"
           - name: MYSQL_DB_USER
             value: root
           - name: MYSQL_DB_PASSWORD
