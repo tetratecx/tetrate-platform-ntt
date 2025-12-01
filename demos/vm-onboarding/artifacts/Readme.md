@@ -135,7 +135,7 @@ onboardingEndpoint:
 workloadGroup:
   namespace: vm
   name: mysqldb
-workload:
+settings:
   connectedOver: INTERNET
 EOF
 

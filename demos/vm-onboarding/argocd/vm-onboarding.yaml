@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: mv-onboarding
+  name: vm-onboarding
   namespace: argocd
 spec:
   destination:
@@ -11,7 +11,7 @@ spec:
   source:
     directory:
       include: "{vm-onboarding.yaml}"
-    path: demos/mv-onboarding/artifacts
+    path: demos/vm-onboarding/artifacts
     repoURL: https://github.com/tetratecx/tetrate-platform-ntt
     targetRevision: HEAD
   syncPolicy:
