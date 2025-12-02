@@ -30,8 +30,10 @@ nav:
     - Application Resilience: demos/application-resilience.md
     - Helm: demos/helm.md
     - Inter Cluster: demos/inter-cluster.md
+    - Observability: demos/observability.md
     - Self Serve: demos/self-serve.md
     - Service Failover via East-West Gateway: demos/service-failover.md
+    - VM Onboarding: demos/vm-onboarding.md
 
 markdown_extensions:
   - pymdownx.highlight:

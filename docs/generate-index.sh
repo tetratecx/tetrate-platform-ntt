@@ -26,22 +26,14 @@ for demo_dir in demos/*/; do
       # e.g., "app-resilience" -> "App Resilience"
       demo_title=$(echo "$demo_name" | sed 's/-/ /g' | awk '{for(i=1;i<=NF;i++) $i=toupper(substr($i,1,1)) tolower(substr($i,2));}1')
       
-      # Try to extract first meaningful line from README as description
-      description=$(grep -m 1 "^[^#]" "${demo_dir}artifacts/Readme.md" | head -n 1 | sed 's/^[[:space:]]*//')
-      
-      # If no description found, use a generic one
-      if [ -z "$description" ]; then
-        description="Documentation for ${demo_title}"
-      fi
-      
-      echo "- **[${demo_title}](demos/${demo_name}.md)** - ${description}" >> docs/index.md
+      echo "- **[${demo_title}](demos/${demo_name}.md)**" >> docs/index.md
     fi
   fi
 done
 
 cat >> docs/index.md << 'FOOTER'
 
-Navigate through the tabs in the left sidebar to explore each demonstration area.
+Navigate through the menu in the left sidebar to explore each demonstration area.
 FOOTER
 
 echo "✓ docs/index.md generated successfully!"

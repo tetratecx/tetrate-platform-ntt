@@ -15,4 +15,4 @@ This documentation covers the following demonstration scenarios:
 - **[Service Failover](demos/service-failover.md)**
 - **[Vm Onboarding](demos/vm-onboarding.md)**
 
-Navigate through the tabs in the left sidebar to explore each demonstration area.
+Navigate through the menu in the left sidebar to explore each demonstration area.

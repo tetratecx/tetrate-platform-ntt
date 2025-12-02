@@ -53,9 +53,9 @@ echo "✓ MkDocs structure updated successfully!"
 echo ""
 
 # Generate index.md automatically
-if [ -f "./generate-index.sh" ]; then
+if [ -f "docs/generate-index.sh" ]; then
   echo "Generating index.md..."
-  ./generate-index.sh
+  docs/generate-index.sh
 fi
 
 echo "Note: Update image paths in your Readme.md files to use:"
