@@ -12,7 +12,7 @@ This documentation covers the following demonstration scenarios:
 - **[Inter Cluster](demos/inter-cluster.md)**
 - **[Observability](demos/observability.md)**
 - **[Self Serve](demos/self-serve.md)**
-- **[Service Failover](demos/service-failover.md)** - Welcome to the Service Failover Demo.
+- **[Service Failover](demos/service-failover.md)**
 - **[Vm Onboarding](demos/vm-onboarding.md)**
 
 Navigate through the tabs in the left sidebar to explore each demonstration area.
