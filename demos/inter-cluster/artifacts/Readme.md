@@ -66,6 +66,7 @@ task generate-traffic
 ### The Value Proof
 
 With Tetrate Platform, organizations gain:
+
 - **Faster transactions & better customer experience**  
 - **Stronger security across clusters and clouds**  
 - **Unified visibility & policy control**  
@@ -75,9 +76,12 @@ With Tetrate Platform, organizations gain:
 
 ### Problem Statement
 
-Traditional inter-cluster traffic relied on **hairpinning**:  
+Traditional inter-cluster traffic relied on **hairpinning**:
+
 Traffic routed through centralized ingress gateways, back into another cluster.  
+
 This leads to:  
+
 - Increased latency from extra hops  
 - Double encryption overhead  
 - Complex DNS/IP routing  
@@ -86,6 +90,7 @@ This leads to:
 ### How Tetrate Platform Solves It
 
 With Tetrate Platform:
+
 - Traffic routes **directly via east-west gateways**  
 - **Global Service Registry** provides cross-cluster service discovery  
 - **Federated trust domains** enforce mTLS & policies everywhere  
