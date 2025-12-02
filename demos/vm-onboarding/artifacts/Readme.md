@@ -33,7 +33,7 @@ The Workload Onboarding consists of the following components:
 The following diagram has an overview of the full onboarding flow:
 
 <figure markdown>
-  ![obs1](../images/vm/vm1.jpg)
+  ![obs1](../images/vm-onboarding/vm1.jpg)
 </figure>
 
 The Workload Onboarding Agent executes the onboarding flow according to the declarative configuration provided by the user.
