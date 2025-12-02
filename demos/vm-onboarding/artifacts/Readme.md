@@ -1,156 +1,59 @@
-# Tetrate Platform VM Onboarding Observability Demo
-- cp patch for vmgateway aws lb - note lb dns k8s-corpedge-vmgatewa-d2c3e53d79-7766c2fc1b8834f5.elb.us-east-2.amazonaws.com
+# Overview
+When you deploy a workload on Kubernetes, the following happens transparently:
 
-# gen certs
-openssl req \
-  -x509 \
-  -subj '/CN=Example CA' \
-  -days 3650 \
-  -sha256 \
-  -newkey rsa:2048 \
-  -nodes \
-  -keyout example-ca.key.pem \
-  -out example-ca.crt.pem \
-  -config <(cat <<EOF
-[ req ]
-distinguished_name     = req                 # name of a section containing the distinguished name fields to prompt for
-x509_extensions        = v3_ca               # name of a section containing a list extentions to add to the self signed certificate
-[ v3_ca ]
-basicConstraints       = CA:TRUE             # not marked as critical for compatibility with broken software
-subjectKeyIdentifier   = hash                # PKIX recommendation
-authorityKeyIdentifier = keyid:always,issuer # PKIX recommendation
-EOF
-)
+1. An Istio sidecar is deployed next to your workload.
+That sidecar is configured with the workload location and other required metadata.
+2. However, when you deploy a workload outside of Kubernetes onto a standalone VM, you have to take care of that by yourself.
 
-openssl req \
-  -subj '/CN=onboarding-endpoint.example' \
-  -sha256 \
-  -newkey rsa:2048 \
-  -nodes \
-  -keyout onboarding-endpoint.example.key.pem \
-  -out onboarding-endpoint.example.csr.pem
+The Workload Onboarding feature solves this problem for you out of the box. Using this feature, all you need to do to onboard a workload deployed on a VM into the mesh is:
 
-openssl x509 \
-  -req \
-  -days 3650 \
-  -sha256 \
-  -in onboarding-endpoint.example.csr.pem \
-  -out onboarding-endpoint.example.crt.pem \
-  -CA example-ca.crt.pem \
-  -CAkey example-ca.key.pem \
-  -CAcreateserial \
-  -extfile <(cat <<EOF
-extensions = usr_cert
-[ usr_cert ]
-basicConstraints       = CA:FALSE            # not marked as critical for compatibility with broken software
-subjectKeyIdentifier   = hash                # PKIX recommendation
-authorityKeyIdentifier = keyid:always,issuer # PKIX recommendation
-keyUsage               = digitalSignature, keyEncipherment
-extendedKeyUsage       = serverAuth
-subjectAltName         = DNS:onboarding-endpoint.example
-EOF
-)
+1. Installing an Istio sidecar on the target VM (via DEB/RPM package).
+2. Install a Workload Onboarding Agent on the target VM (also via DEB/RPM package).
+3. Provide a minimal, declarative configuration describing where to onboard the workload, e.g.
 
-# create secret 
-
-kubectl create secret tls onboarding-endpoint-tls-cert \
-  -n istio-system \
-  --cert=onboarding-endpoint.example.crt.pem \
-  --key=onboarding-endpoint.example.key.pem
-
-# patch cp for secret 
-
-  meshExpansion:
-    onboarding:
-      endpoint:
-        hosts:
-        - onboarding-endpoint.example
-        secretName: onboarding-endpoint-tls-cert
-
-# Update package list
-sudo apt-get update -y
-
-# Install CA certificates package
-sudo apt-get install -y ca-certificates
-
-#copy example-ca.crt.pem to vm /usr/local/share/ca-certificates/example-ca.crt
-sudo update-ca-certificates
-1 added, 0 removed; done.
-
-# Install Istio Sidecar
-  # Download DEB package
-ONBOARDING_ENDPOINT_ADDRESS=k8s-corpedge-vmgatewa-d2c3e53d79-7766c2fc1b8834f5.elb.us-east-2.amazonaws.com
-curl -fLO \
-  --connect-to "onboarding-endpoint.example:443:${ONBOARDING_ENDPOINT_ADDRESS}:443" \
-  "https://onboarding-endpoint.example/install/deb/amd64/istio-sidecar.deb"
-
-# Download checksum
-curl -fLO \
-  --connect-to "onboarding-endpoint.example:443:${ONBOARDING_ENDPOINT_ADDRESS}:443" \
-  "https://onboarding-endpoint.example/install/deb/amd64/istio-sidecar.deb.sha256"
-
-# Verify the checksum
-sha256sum --check istio-sidecar.deb.sha256
-
-# Install DEB package
-sudo apt-get install -y ./istio-sidecar.deb
-
-# Remove downloaded files
-rm istio-sidecar.deb istio-sidecar.deb.sha256
-
-#Install Workload Onboarding Agent - vmgateway svc in istio-system
-export ONBOARDING_ENDPOINT_ADDRESS="34.130.140.124"
-
-  # Download the agent package
-curl -fLO \
-  --connect-to "onboarding-endpoint.example:443:${ONBOARDING_ENDPOINT_ADDRESS}:443" \
-  "https://onboarding-endpoint.example/install/deb/amd64/onboarding-agent.deb"
-
-  # Download checksum
-curl -fLO \
-  --connect-to "onboarding-endpoint.example:443:${ONBOARDING_ENDPOINT_ADDRESS}:443" \
-  "https://onboarding-endpoint.example/install/deb/amd64/onboarding-agent.deb.sha256"
-
-  # Verify checksum
-sha256sum --check onboarding-agent.deb.sha256
-
-  # Install the agent
-sudo apt-get install -y ./onboarding-agent.deb
-
-  # Clean up
-rm onboarding-agent.deb onboarding-agent.deb.sha256
-
-# Create Onboarding Configuration
-
-sudo mkdir -p /etc/onboarding-agent
-
-cat <<EOF | sudo tee /etc/onboarding-agent/onboarding.config.yaml
+```
 apiVersion: config.agent.onboarding.tetrate.io/v1alpha1
 kind: OnboardingConfiguration
-onboardingEndpoint:
-  host: ${ONBOARDING_ENDPOINT_ADDRESS}
-  transportSecurity:
-    tls:
-      sni: onboarding-endpoint.example
-workloadGroup:
-  namespace: vm
-  name: mysqldb
-settings:
-  connectedOver: INTERNET
-EOF
+onboardingEndpoint:                            # connect to
+  host: onboarding-endpoint.your-company.corp
+workloadGroup:                                 # join to
+  namespace: bookinfo
+  name: ratings
+```
 
-  # Start Workload Onboarding Agent - Enable the service
-sudo systemctl enable onboarding-agent
+# Components and Workflow
+The Workload Onboarding consists of the following components:
 
-  # Start the service
-sudo systemctl start onboarding-agent
-sudo systemctl stop onboarding-agent
+| Component                    | Description                                                                                     |
+|-----------------------------|-------------------------------------------------------------------------------------------------|
+| Workload Onboarding Operator | the component that is installed into your Kubernetes cluster as part of the TSB Control Plane   |
+| Workload Onboarding Agent    | the component you need to install next to your VM workload                                      |
+| Workload Onboarding Endpoint | the component which the Workload Onboarding Agent will connect to register the workload in the mesh and obtain boot configuration for the Istio sidecar |
 
-  # Check the status
-sudo systemctl status onboarding-agent
+The following diagram has an overview of the full onboarding flow:
 
-  # Verify Agent Logs
-sudo journalctl -u onboarding-agent -f
+<figure markdown>
+  ![obs1](../images/vm/vm1.jpg)
+</figure>
 
-  # check if sidecar is running
-curl -f -i http://localhost:15000/ready
+The Workload Onboarding Agent executes the onboarding flow according to the declarative configuration provided by the user.
+
+```
+apiVersion: config.agent.onboarding.tetrate.io/v1alpha1
+kind: OnboardingConfiguration
+onboardingEndpoint:                           # (1)
+  host: onboarding-endpoint.your-company.corp
+workloadGroup:                                # (2)
+  namespace: bookinfo
+  name: ratings
+```
+
+Given the above configuration, the following takes place:
+
+1. The Workload Onboarding Agent will connect to the Workload Onboarding Endpoint at https://onboarding-endpoint.your-company.corp:15443 (1)
+2. The Workload Onboarding Endpoint will authenticate the connecting Agent from the cloud-specific credentials of the VM
+3. The Workload Onboarding Endpoint will decide whether a workload with such an identity, i.e. the identity of the VM, is authorized to join the mesh in the given WorkloadGroup (2) in particular
+4. The Workload Onboarding Endpoint will register a new WorkloadEntry at the Istio Control Plane to represent the workload
+5. The Workload Onboarding Endpoint will generate the boot configuration required to start Istio Proxy according to the respective WorkloadGroup resource (2)
+6. The Workload Onboarding Agent will save the returned boot configuration to disk and start the Istio sidecar
+7. The Istio sidecar will connect to the Istio Control Plane and receive its runtime configuration
