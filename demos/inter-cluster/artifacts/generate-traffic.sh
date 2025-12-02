@@ -2,7 +2,7 @@
 N=1
 while true; do
   result=$(curl -sk -o /dev/null -w '%{http_code} %{time_total}' \
-    "http://transactions.dynabank.com"" \
+    "http://transactions.dynabank.com" \
     --resolve transactions.dynabank.com:80:3.134.119.133 \
     --retry 5 --retry-all-errors --retry-delay 0 --max-time 3) || result="000 0"
 
